@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lorven Elevators | Quality Elevators in Hyderabad</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom Styles for Animations, Sliders & Banner -->
+    <style>
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        /* Slider specific transitions */
+        .slide { transition: opacity 0.7s ease-in-out; }
+        .slide-active { opacity: 1; z-index: 10; }
+        .slide-hidden { opacity: 0; z-index: 0; pointer-events: none; }
+        
+        /* Planner step transitions */
+        .step-active { display: block; animation: fadeIn 0.4s ease-out; }
+        .step-hidden { display: none; }
+
+        /* Diagonal Ash Banner Overlay */
+        .vini-banner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 150%;
+            text-align: center;
+            transform: translate(-50%, -50%) rotate(-35deg);
+            background-color: rgba(148, 163, 184, 0.15); /* Tailwind slate-400 with 15% opacity */
+            color: rgba(51, 65, 85, 0.4); /* Tailwind slate-700 with 40% opacity for text */
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            padding: 1rem 0;
+            z-index: 9999;
+            pointer-events: none; /* Crucial: Allows clicking through the banner */
+            user-select: none;
+            backdrop-filter: blur(1px); /* Slight blur for premium feel */
+            border-top: 1px solid rgba(148, 163, 184, 0.2);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+        }
+        
+        /* Adjust banner text size on smaller screens */
+        @media (max-width: 768px) {
+            .vini-banner {
+                font-size: 1rem;
+                transform: translate(-50%, -50%) rotate(-45deg);
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen font-sans text-slate-800 bg-white selection:bg-blue-200 selection:text-blue-900 flex flex-col relative overflow-x-hidden">
+
+    <!-- GLOBAL WATERMARK BANNER -->
+    <div class="vini-banner">
+        Owned by ViNi Business Solutions
+    </div>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-50 bg-white shadow-sm border-b border-slate-200">
+        <!-- Top Bar -->
+        <div class="bg-slate-900 text-slate-300 py-2 px-4 text-sm hidden md:block">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+                <div class="flex items-center space-x-6">
+                    <span class="flex items-center"><i class="fa-solid fa-phone mr-2"></i> 08045476585</span>
+                    <span class="flex items-center"><i class="fa-solid fa-envelope mr-2"></i> sales@lorvenelevators.com</span>
+                </div>
+                <div>GST: 36AAECL8552H1Z9</div>
+            </div>
+        </div>
+
+        <!-- Main Nav -->
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <div class="flex items-center cursor-pointer" onclick="navigate('home')">
+                <div class="w-10 h-10 bg-blue-600 rounded flex items-center justify-center mr-3">
+                    <i class="fa-solid fa-circle-up text-white text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-900 leading-none">Lorven Elevators</h1>
+                    <span class="text-xs text-slate-500 font-medium">Lorven Homes Pvt. Ltd.</span>
+                </div>
+            </div>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex space-x-6 items-center lg:space-x-8">
+                <button onclick="navigate('home')" class="nav-btn font-medium transition-colors text-blue-600" data-target="home">Home</button>
+                <button onclick="navigate('about')" class="nav-btn font-medium transition-colors text-slate-600 hover:text-blue-600" data-target="about">About Us</button>
+                <button onclick="navigate('products')" class="nav-btn font-medium transition-colors text-slate-600 hover:text-blue-600" data-target="products">Products</button>
+                <button onclick="navigate('services')" class="nav-btn font-medium transition-colors text-slate-600 hover:text-blue-600" data-target="services">Services</button>
+                <button onclick="navigate('planner')" class="nav-btn font-medium transition-colors text-slate-600 hover:text-blue-600" data-target="planner">Project Planner <i class="fa-solid fa-wand-magic-sparkles text-amber-500 ml-1"></i></button>
+                <button onclick="navigate('contact')" class="nav-btn font-medium transition-colors text-slate-600 hover:text-blue-600" data-target="contact">Contact</button>
+                <button onclick="quickQuote('General Inquiry')" class="bg-blue-600 text-white px-5 py-2 rounded font-semibold hover:bg-blue-700 transition-colors">
+                    <i class="fa-brands fa-whatsapp mr-1"></i> Chat
+                </button>
+            </nav>
+
+            <!-- Mobile Toggle -->
+            <button class="md:hidden text-slate-900 text-2xl z-50 relative" onclick="toggleMobileMenu()">
+                <i class="fa-solid fa-bars" id="mobile-menu-icon"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Nav Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100 absolute w-full shadow-lg z-40">
+            <div class="px-4 py-2 flex flex-col space-y-2 relative">
+                <button onclick="navigate('home')" class="nav-btn-mobile text-left py-3 font-medium border-b border-slate-50 text-blue-600" data-target="home">Home</button>
+                <button onclick="navigate('about')" class="nav-btn-mobile text-left py-3 font-medium border-b border-slate-50 text-slate-600" data-target="about">About Us</button>
+                <button onclick="navigate('products')" class="nav-btn-mobile text-left py-3 font-medium border-b border-slate-50 text-slate-600" data-target="products">Our Products</button>
+                <button onclick="navigate('services')" class="nav-btn-mobile text-left py-3 font-medium border-b border-slate-50 text-slate-600" data-target="services">Services</button>
+                <button onclick="navigate('planner')" class="nav-btn-mobile text-left py-3 font-medium border-b border-slate-50 text-slate-600" data-target="planner">Project Planner <i class="fa-solid fa-wand-magic-sparkles text-amber-500 ml-1"></i></button>
+                <button onclick="navigate('contact')" class="nav-btn-mobile text-left py-3 font-medium border-b border-slate-50 text-slate-600" data-target="contact">Contact Us</button>
+                <div class="py-4">
+                    <button onclick="quickQuote('General Inquiry')" class="w-full bg-blue-600 text-white px-5 py-3 rounded font-semibold hover:bg-blue-700 relative z-50">
+                        <i class="fa-brands fa-whatsapp mr-1"></i> Chat on WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-grow relative">
+
+        <!-- ================= HOME SECTION ================= -->
+        <section id="home" class="page-section fade-in">
+            <!-- Hero -->
+            <div class="relative bg-slate-900 h-[80vh] min-h-[600px] flex items-center justify-center text-center">
+                <div class="absolute inset-0 overflow-hidden">
+                    <img src="./assets/images/hero-bg.jpg" alt="Elevator Background" class="w-full h-full object-cover opacity-30" onerror="this.src='https://images.unsplash.com/photo-1541438202517-573511eb9dc9?auto=format&fit=crop&w=1920&q=80'" />
+                    <div class="absolute inset-0 bg-gradient-to-b from-slate-900/50 to-slate-900/90"></div>
+                </div>
+                <div class="relative z-10 px-4 max-w-4xl mx-auto">
+                    <div class="inline-block px-4 py-1.5 rounded-full bg-blue-900/50 border border-blue-500/30 text-blue-300 font-medium text-sm mb-6">
+                        Premium Elevator Solutions in Hyderabad
+                    </div>
+                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-tight">
+                        Precision Mobility for <br/>Every Space
+                    </h1>
+                    <p class="text-lg md:text-xl text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+                        Reliable building passenger elevators, industrial goods lifts, and residential mini lifts designed for lasting performance and elegant safety.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button onclick="navigate('products')" class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded font-bold text-lg transition-all shadow-lg shadow-blue-900/20 relative z-50">
+                            Explore Products
+                        </button>
+                        <button onclick="navigate('planner')" class="bg-amber-500 hover:bg-amber-400 text-slate-900 px-8 py-4 rounded font-bold text-lg transition-all shadow-lg relative z-50">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Plan Your Project
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Highlights -->
+            <div class="py-16 bg-white relative z-10">
+                <div class="max-w-7xl mx-auto px-4">
+                    <div class="grid md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-slate-100">
+                        <div class="p-4 bg-white/50 rounded-xl">
+                            <i class="fa-solid fa-shield-halved text-5xl text-blue-600 mb-4 block"></i>
+                            <h3 class="text-xl font-bold mb-2">Unmatched Safety</h3>
+                            <p class="text-slate-600">Advanced safety mechanisms ensuring maximum security for every passenger.</p>
+                        </div>
+                        <div class="p-4 bg-white/50 rounded-xl">
+                            <i class="fa-solid fa-industry text-5xl text-blue-600 mb-4 block"></i>
+                            <h3 class="text-xl font-bold mb-2">Robust Engineering</h3>
+                            <p class="text-slate-600">Space-optimized structures with heavy load handling capacity.</p>
+                        </div>
+                        <div class="p-4 bg-white/50 rounded-xl">
+                            <i class="fa-solid fa-circle-check text-5xl text-blue-600 mb-4 block"></i>
+                            <h3 class="text-xl font-bold mb-2">Quality Craftsmanship</h3>
+                            <p class="text-slate-600">Seamless blend of aesthetic appeal and operational reliability.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Products Mini -->
+            <div class="py-20 bg-slate-50 relative z-10">
+                <div class="max-w-7xl mx-auto px-4">
+                    <div class="flex justify-between items-end mb-12">
+                        <div>
+                            <h2 class="text-3xl font-bold text-slate-900 mb-4">Most Popular Lifts</h2>
+                            <p class="text-slate-600 max-w-2xl relative z-20 bg-slate-50/80 p-2 rounded">Discover our range of meticulously engineered elevators designed for residential, commercial, and industrial applications.</p>
+                        </div>
+                        <button onclick="navigate('products')" class="hidden md:flex items-center text-blue-600 font-semibold hover:text-blue-800 relative z-50">
+                            View All <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <!-- Card 1 -->
+                        <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all group border border-slate-100 relative z-20">
+                            <div class="h-64 overflow-hidden relative">
+                                <img src="./assets/images/glass-passenger-elevator.jpg" alt="Glass Passenger Elevator" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://images.unsplash.com/photo-1570114682623-64908eb881fc?auto=format&fit=crop&w=800&q=80'" />
+                                <div class="absolute top-4 right-4 bg-white/90 backdrop-blur text-slate-800 text-xs font-bold px-3 py-1 rounded-full shadow-sm">Commercial</div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-slate-900 mb-2">Glass Passenger Elevator</h3>
+                                <p class="text-slate-600 text-sm mb-6 line-clamp-2">Elegant 5 Feet glass door passenger elevators providing a panoramic view, ideal for malls and corporate buildings.</p>
+                                <button onclick="quickQuote('Glass Passenger Elevator')" class="w-full border border-green-500 text-green-600 hover:bg-green-500 hover:text-white py-2.5 rounded font-semibold transition-colors relative z-50"><i class="fa-brands fa-whatsapp"></i> Get Quote via WhatsApp</button>
+                            </div>
+                        </div>
+                        <!-- Card 2 -->
+                        <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all group border border-slate-100 relative z-20">
+                            <div class="h-64 overflow-hidden relative">
+                                <img src="./assets/images/residential-mini-lift.jpg" alt="Residential Mini Lift" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://images.unsplash.com/photo-1600607688969-a5bfcd64bd40?auto=format&fit=crop&w=800&q=80'" />
+                                <div class="absolute top-4 right-4 bg-white/90 backdrop-blur text-slate-800 text-xs font-bold px-3 py-1 rounded-full shadow-sm">Residential</div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-slate-900 mb-2">Residential Mini Lift</h3>
+                                <p class="text-slate-600 text-sm mb-6 line-clamp-2">Space-optimized structure with smooth, silent operation. Perfect for enhancing mobility in private residences.</p>
+                                <button onclick="quickQuote('Residential Mini Lift')" class="w-full border border-green-500 text-green-600 hover:bg-green-500 hover:text-white py-2.5 rounded font-semibold transition-colors relative z-50"><i class="fa-brands fa-whatsapp"></i> Get Quote via WhatsApp</button>
+                            </div>
+                        </div>
+                        <!-- Card 3 -->
+                        <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all group border border-slate-100 relative z-20">
+                            <div class="h-64 overflow-hidden relative">
+                                <img src="./assets/images/hospital-elevator.jpg" alt="15 Persons Hospital Elevator" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=800&q=80'" />
+                                <div class="absolute top-4 right-4 bg-white/90 backdrop-blur text-slate-800 text-xs font-bold px-3 py-1 rounded-full shadow-sm">Healthcare</div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-slate-900 mb-2">15 Persons Hospital Elevator</h3>
+                                <p class="text-slate-600 text-sm mb-6 line-clamp-2">High-capacity, robust elevator designed for seamless and safe transport of patients and medical equipment.</p>
+                                <button onclick="quickQuote('15 Persons Hospital Elevator')" class="w-full border border-green-500 text-green-600 hover:bg-green-500 hover:text-white py-2.5 rounded font-semibold transition-colors relative z-50"><i class="fa-brands fa-whatsapp"></i> Get Quote via WhatsApp</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button onclick="navigate('products')" class="md:hidden mt-8 w-full flex justify-center items-center text-blue-600 font-semibold border border-blue-200 py-3 rounded-lg bg-blue-50 relative z-50">
+                        View All Products <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ABOUT SECTION ================= -->
+        <section id="about" class="page-section hidden fade-in relative z-10">
+            <div class="py-20 bg-white/90 backdrop-blur-sm">
+                <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-16 items-center">
+                    <div class="relative z-20">
+                        <h1 class="text-4xl font-extrabold text-slate-900 mb-6 bg-white/50 inline-block p-2 rounded">Company Profile</h1>
+                        <h2 class="text-2xl font-semibold text-blue-600 mb-6">Lorven Homes Private Limited</h2>
+                        <div class="space-y-4 text-slate-600 text-lg leading-relaxed bg-white/80 p-4 rounded-xl">
+                            <p>Lorven Homes Private Limited stands as a dedicated Manufacturer, Supplier, and Service Provider delivering advanced elevator solutions for diverse needs.</p>
+                            <p>Our product line spans building passenger elevators, industrial elevators, residential mini lifts, manual outdoor lifts, hydraulic home elevators, elevator cabins, and MS elevator counter weights. Each product reflects a seamless blend of engineering precision, aesthetic appeal, and operational reliability.</p>
+                            <p>Every elevator is developed with a space-optimized structure and robust load handling capacity. The weather-resistant build and low-maintenance systems promise longevity, while user-friendly controls allow effortless operation for all age groups.</p>
+                        </div>
+                    </div>
+                    <div class="relative z-20">
+                        <div class="absolute inset-0 bg-blue-600 rounded-3xl transform translate-x-4 translate-y-4 opacity-20"></div>
+                        <img src="./assets/images/company-profile.jpg" alt="Elevator Manufacturing" class="relative rounded-3xl shadow-xl w-full object-cover h-[500px]" onerror="this.src='https://images.unsplash.com/photo-1541438202517-573511eb9dc9?auto=format&fit=crop&w=800&q=80'" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="py-20 bg-slate-900/95 backdrop-blur-sm text-white relative z-10">
+                <div class="max-w-4xl mx-auto px-4 text-center">
+                    <h2 class="text-3xl font-bold mb-8 relative z-20">Our Quality Policy</h2>
+                    <div class="bg-slate-800 p-10 rounded-2xl border border-slate-700 shadow-2xl relative z-20">
+                        <p class="text-lg text-slate-300 leading-relaxed italic">
+                            "Value creation lies in craftsmanship, technological integration, and a commitment to sustainability. Designs are engineered to meet the highest standards, balancing visual elegance with functionality. Every stage, from concept to installation, undergoes meticulous quality checks, ensuring that customers receive products that excel in performance and endurance."
+                        </p>
+                        <div class="mt-8 pt-8 border-t border-slate-700 flex justify-center space-x-12">
+                            <div>
+                                <div class="text-4xl font-black text-blue-500 mb-2">10+</div>
+                                <div class="text-sm font-medium text-slate-400 uppercase tracking-wider">Years Exp.</div>
+                            </div>
+                            <div>
+                                <div class="text-4xl font-black text-blue-500 mb-2">100%</div>
+                                <div class="text-sm font-medium text-slate-400 uppercase tracking-wider">Safety Record</div>
+                            </div>
+                            <div>
+                                <div class="text-4xl font-black text-blue-500 mb-2">24/7</div>
+                                <div class="text-sm font-medium text-slate-400 uppercase tracking-wider">Support</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PRODUCTS SECTION ================= -->
+        <section id="products" class="page-section hidden fade-in py-16 px-4 max-w-7xl mx-auto relative z-10">
+            <div class="text-center mb-16 relative z-20">
+                <h1 class="text-4xl font-extrabold text-slate-900 mb-4 bg-white/50 inline-block p-2 rounded">Our Products</h1>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto bg-white/50 p-2 rounded">
+                    Lorven Homes Private Limited delivers an extensive product line tailored to meet modern mobility demands with elegance and efficiency.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Product 1 -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-slate-100 flex flex-col relative z-20">
+                    <div class="h-60 overflow-hidden relative">
+                        <img src="./assets/images/glass-passenger-elevator.jpg" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1570114682623-64908eb881fc?auto=format&fit=crop&w=800&q=80'" />
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur p-2 rounded-lg shadow-sm">
+                            <i class="fa-solid fa-building w-5 h-5 flex justify-center items-center text-blue-600"></i>
+                        </div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <div class="text-xs font-bold text-blue-600 uppercase tracking-wider mb-2">Commercial</div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Glass Passenger Elevator</h3>
+                        <p class="text-slate-600 text-sm mb-6 flex-grow">Elegant 5 Feet glass door passenger elevators providing a panoramic view, ideal for malls and corporate buildings.</p>
+                        <button onclick="quickQuote('Glass Passenger Elevator')" class="w-full bg-green-600 hover:bg-green-500 text-white py-3 rounded-lg font-semibold transition-colors flex items-center justify-center relative z-50">
+                            <i class="fa-brands fa-whatsapp mr-2 text-lg"></i> Quote via WhatsApp
+                        </button>
+                    </div>
+                </div>
+                <!-- Product 2 -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-slate-100 flex flex-col relative z-20">
+                    <div class="h-60 overflow-hidden relative">
+                        <img src="./assets/images/residential-mini-lift.jpg" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1600607688969-a5bfcd64bd40?auto=format&fit=crop&w=800&q=80'" />
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur p-2 rounded-lg shadow-sm">
+                            <i class="fa-solid fa-house w-5 h-5 flex justify-center items-center text-blue-600"></i>
+                        </div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <div class="text-xs font-bold text-blue-600 uppercase tracking-wider mb-2">Residential</div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Residential Mini Lift</h3>
+                        <p class="text-slate-600 text-sm mb-6 flex-grow">Space-optimized structure with smooth, silent operation. Perfect for enhancing mobility in private residences.</p>
+                        <button onclick="quickQuote('Residential Mini Lift')" class="w-full bg-green-600 hover:bg-green-500 text-white py-3 rounded-lg font-semibold transition-colors flex items-center justify-center relative z-50">
+                            <i class="fa-brands fa-whatsapp mr-2 text-lg"></i> Quote via WhatsApp
+                        </button>
+                    </div>
+                </div>
+                <!-- Product 3 -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-slate-100 flex flex-col relative z-20">
+                    <div class="h-60 overflow-hidden relative">
+                        <img src="./assets/images/hospital-elevator.jpg" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=800&q=80'" />
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur p-2 rounded-lg shadow-sm">
+                            <i class="fa-solid fa-heart-pulse w-5 h-5 flex justify-center items-center text-blue-600"></i>
+                        </div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <div class="text-xs font-bold text-blue-600 uppercase tracking-wider mb-2">Healthcare</div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">15 Persons Hospital Elevator</h3>
+                        <p class="text-slate-600 text-sm mb-6 flex-grow">High-capacity, robust elevator designed for seamless and safe transport of patients and medical equipment.</p>
+                        <button onclick="quickQuote('15 Persons Hospital Elevator')" class="w-full bg-green-600 hover:bg-green-500 text-white py-3 rounded-lg font-semibold transition-colors flex items-center justify-center relative z-50">
+                            <i class="fa-brands fa-whatsapp mr-2 text-lg"></i> Quote via WhatsApp
+                        </button>
+                    </div>
+                </div>
+                <!-- Product 4 -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-slate-100 flex flex-col relative z-20">
+                    <div class="h-60 overflow-hidden relative">
+                        <img src="./assets/images/industrial-goods-lift.jpg" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80'" />
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur p-2 rounded-lg shadow-sm">
+                            <i class="fa-solid fa-industry w-5 h-5 flex justify-center items-center text-blue-600"></i>
+                        </div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <div class="text-xs font-bold text-blue-600 uppercase tracking-wider mb-2">Industrial</div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Industrial Goods Lift</h3>
+                        <p class="text-slate-600 text-sm mb-6 flex-grow">Heavy-duty goods lift with exceptional load handling capacity, tailored for warehouses and factories.</p>
+                        <button onclick="quickQuote('Industrial Goods Lift')" class="w-full bg-green-600 hover:bg-green-500 text-white py-3 rounded-lg font-semibold transition-colors flex items-center justify-center relative z-50">
+                            <i class="fa-brands fa-whatsapp mr-2 text-lg"></i> Quote via WhatsApp
+                        </button>
+                    </div>
+                </div>
+                <!-- Product 5 -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-slate-100 flex flex-col relative z-20">
+                    <div class="h-60 overflow-hidden relative">
+                        <img src="./assets/images/manual-outdoor-lift.jpg" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1520699049698-acd2fce18736?auto=format&fit=crop&w=800&q=80'" />
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur p-2 rounded-lg shadow-sm">
+                            <i class="fa-solid fa-box w-5 h-5 flex justify-center items-center text-blue-600"></i>
+                        </div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <div class="text-xs font-bold text-blue-600 uppercase tracking-wider mb-2">Residential</div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Manual Outdoor Lift</h3>
+                        <p class="text-slate-600 text-sm mb-6 flex-grow">Weather-resistant, low-maintenance outdoor mobility solutions built to withstand harsh environmental conditions.</p>
+                        <button onclick="quickQuote('Manual Outdoor Lift')" class="w-full bg-green-600 hover:bg-green-500 text-white py-3 rounded-lg font-semibold transition-colors flex items-center justify-center relative z-50">
+                            <i class="fa-brands fa-whatsapp mr-2 text-lg"></i> Quote via WhatsApp
+                        </button>
+                    </div>
+                </div>
+                <!-- Product 6 -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-slate-100 flex flex-col relative z-20">
+                    <div class="h-60 overflow-hidden relative">
+                        <img src="./assets/images/elevator-spare-parts.jpg" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80'" />
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur p-2 rounded-lg shadow-sm">
+                            <i class="fa-solid fa-gear w-5 h-5 flex justify-center items-center text-blue-600"></i>
+                        </div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <div class="text-xs font-bold text-blue-600 uppercase tracking-wider mb-2">Components</div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Elevator Spare Parts</h3>
+                        <p class="text-slate-600 text-sm mb-6 flex-grow">High-quality MS elevator counter weights, guide brackets, shoes, and pulleys for optimal performance.</p>
+                        <button onclick="quickQuote('Elevator Spare Parts')" class="w-full bg-green-600 hover:bg-green-500 text-white py-3 rounded-lg font-semibold transition-colors flex items-center justify-center relative z-50">
+                            <i class="fa-brands fa-whatsapp mr-2 text-lg"></i> Quote via WhatsApp
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SERVICES WITH IMAGE SLIDERS ================= -->
+        <section id="services" class="page-section hidden fade-in py-16 bg-white/90 backdrop-blur-sm min-h-[80vh] relative z-10">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-16 relative z-20">
+                    <h1 class="text-4xl font-extrabold text-slate-900 mb-4 bg-white/50 inline-block p-2 rounded">Elevator Services</h1>
+                    <p class="text-lg text-slate-600 max-w-3xl mx-auto bg-white/50 p-2 rounded">
+                        Beyond manufacturing, we provide end-to-end solutions to ensure your elevators operate seamlessly, safely, and efficiently for years to come.
+                    </p>
+                </div>
+
+                <div class="space-y-20">
+                    <!-- Service 1: Installation -->
+                    <div class="flex flex-col lg:flex-row gap-10 items-center">
+                        <div class="lg:w-1/2 space-y-6 relative z-20 bg-white/80 p-6 rounded-2xl">
+                            <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center">
+                                <i class="fa-solid fa-circle-up text-3xl text-blue-600"></i>
+                            </div>
+                            <h3 class="text-3xl font-bold text-slate-900">Installation Services</h3>
+                            <p class="text-slate-600 text-lg leading-relaxed">
+                                The seamless installation process minimizes disruption, ensuring clients receive an efficient, reliable, and long-term performance solution. We handle full structural assessments and precision fitting for both commercial and residential setups.
+                            </p>
+                            <ul class="space-y-3 text-slate-700 font-medium">
+                                <li><i class="fa-solid fa-check text-blue-600 mr-2"></i> On-site structural evaluation</li>
+                                <li><i class="fa-solid fa-check text-blue-600 mr-2"></i> Rigorous safety and load testing</li>
+                                <li><i class="fa-solid fa-check text-blue-600 mr-2"></i> Clean and efficient deployment</li>
+                            </ul>
+                            <button onclick="quickQuote('Installation Services')" class="inline-flex items-center text-blue-600 font-bold hover:text-blue-800 relative z-50">
+                                Consult our Engineers <i class="fa-solid fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                        <div class="lg:w-1/2 w-full relative z-20">
+                            <div class="relative h-80 md:h-96 rounded-3xl overflow-hidden shadow-xl" id="slider-install">
+                                <img src="./assets/images/install-service-1.jpg" class="slide slide-active absolute inset-0 w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80'">
+                                <img src="./assets/images/install-service-2.jpg" class="slide slide-hidden absolute inset-0 w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1541438202517-573511eb9dc9?auto=format&fit=crop&w=800&q=80'">
+                                <img src="./assets/images/install-service-3.jpg" class="slide slide-hidden absolute inset-0 w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=800&q=80'">
+                                
+                                <button onclick="prevSlide('slider-install')" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-900 w-10 h-10 rounded-full flex items-center justify-center shadow z-50"><i class="fa-solid fa-chevron-left"></i></button>
+                                <button onclick="nextSlide('slider-install')" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-900 w-10 h-10 rounded-full flex items-center justify-center shadow z-50"><i class="fa-solid fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Service 2: Maintenance -->
+                    <div class="flex flex-col lg:flex-row-reverse gap-10 items-center">
+                        <div class="lg:w-1/2 space-y-6 relative z-20 bg-white/80 p-6 rounded-2xl">
+                            <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center">
+                                <i class="fa-solid fa-wrench text-3xl text-blue-600"></i>
+                            </div>
+                            <h3 class="text-3xl font-bold text-slate-900">Maintenance & Repair</h3>
+                            <p class="text-slate-600 text-lg leading-relaxed">
+                                Low-maintenance systems designed for longevity, backed by our swift response team. We offer routine checks, part replacements, and emergency repairs to prevent downtime.
+                            </p>
+                            <ul class="space-y-3 text-slate-700 font-medium">
+                                <li><i class="fa-solid fa-check text-blue-600 mr-2"></i> 24/7 Emergency response teams</li>
+                                <li><i class="fa-solid fa-check text-blue-600 mr-2"></i> Annual maintenance contracts (AMC)</li>
+                                <li><i class="fa-solid fa-check text-blue-600 mr-2"></i> Proactive part degradation checks</li>
+                            </ul>
+                            <button onclick="quickQuote('Maintenance Services')" class="inline-flex items-center text-blue-600 font-bold hover:text-blue-800 relative z-50">
+                                Request a Technician <i class="fa-solid fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                        <div class="lg:w-1/2 w-full relative z-20">
+                            <div class="relative h-80 md:h-96 rounded-3xl overflow-hidden shadow-xl" id="slider-maint">
+                                <img src="./assets/images/maint-service-1.jpg" class="slide slide-active absolute inset-0 w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80'">
+                                <img src="./assets/images/maint-service-2.jpg" class="slide slide-hidden absolute inset-0 w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=800&q=80'">
+                                <img src="./assets/images/maint-service-3.jpg" class="slide slide-hidden absolute inset-0 w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=800&q=80'">
+                                
+                                <button onclick="prevSlide('slider-maint')" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-900 w-10 h-10 rounded-full flex items-center justify-center shadow z-50"><i class="fa-solid fa-chevron-left"></i></button>
+                                <button onclick="nextSlide('slider-maint')" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-900 w-10 h-10 rounded-full flex items-center justify-center shadow z-50"><i class="fa-solid fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Service 3: Modernization -->
+                    <div class="flex flex-col lg:flex-row gap-10 items-center">
+                        <div class="lg:w-1/2 space-y-6 relative z-20 bg-white/80 p-6 rounded-2xl">
+                            <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center">
+                                <i class="fa-solid fa-gear text-3xl text-blue-600"></i>
+                            </div>
+                            <h3 class="text-3xl font-bold text-slate-900">Modernization & Spares</h3>
+                            <p class="text-slate-600 text-lg leading-relaxed">
+                                Upgrade your older lift systems with advanced mechanisms, digital control panels, and sleek aesthetics. We also supply authentic spare parts including MS counter weights, elevator pulleys, and brackets.
+                            </p>
+                            <ul class="space-y-3 text-slate-700 font-medium">
+                                <li><i class="fa-solid fa-check text-blue-600 mr-2"></i> Cabin interior upgrades</li>
+                                <li><i class="fa-solid fa-check text-blue-600 mr-2"></i> Control panel & mechanical retrofits</li>
+                                <li><i class="fa-solid fa-check text-blue-600 mr-2"></i> Premium authentic spare parts supply</li>
+                            </ul>
+                            <button onclick="quickQuote('Modernization & Spares')" class="inline-flex items-center text-blue-600 font-bold hover:text-blue-800 relative z-50">
+                                Upgrade Your Lift <i class="fa-solid fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                        <div class="lg:w-1/2 w-full relative z-20">
+                            <div class="relative h-80 md:h-96 rounded-3xl overflow-hidden shadow-xl" id="slider-mod">
+                                <img src="./assets/images/mod-service-1.jpg" class="slide slide-active absolute inset-0 w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1558236714-d0a644e138a0?auto=format&fit=crop&w=800&q=80'">
+                                <img src="./assets/images/mod-service-2.jpg" class="slide slide-hidden absolute inset-0 w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1614051010729-15d97f2b963a?auto=format&fit=crop&w=800&q=80'">
+                                <img src="./assets/images/mod-service-3.jpg" class="slide slide-hidden absolute inset-0 w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1611082530188-692db24c7f0a?auto=format&fit=crop&w=800&q=80'">
+                                
+                                <button onclick="prevSlide('slider-mod')" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-900 w-10 h-10 rounded-full flex items-center justify-center shadow z-50"><i class="fa-solid fa-chevron-left"></i></button>
+                                <button onclick="nextSlide('slider-mod')" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-slate-900 w-10 h-10 rounded-full flex items-center justify-center shadow z-50"><i class="fa-solid fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PROJECT PLANNER SECTION ================= -->
+        <section id="planner" class="page-section hidden fade-in py-16 bg-slate-50/90 backdrop-blur-sm min-h-screen relative z-10">
+            <div class="max-w-4xl mx-auto px-4">
+                <div class="text-center mb-10 relative z-20">
+                    <h1 class="text-4xl font-extrabold text-slate-900 mb-4 bg-white/50 inline-block p-2 rounded">Project Planner <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i></h1>
+                    <p class="text-lg text-slate-600 bg-white/50 p-2 rounded inline-block">Build a custom blueprint based on your architectural needs and instantly send it to our engineering team.</p>
+                </div>
+
+                <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden relative z-20">
+                    
+                    <!-- Progress Bar -->
+                    <div class="flex bg-slate-100 border-b border-slate-200 text-sm font-semibold text-slate-500 text-center">
+                        <div class="w-1/3 py-4 border-r border-slate-200" id="prog-1" style="color: #2563eb; background: #eff6ff;">1. Template</div>
+                        <div class="w-1/3 py-4 border-r border-slate-200" id="prog-2">2. Specs</div>
+                        <div class="w-1/3 py-4" id="prog-3">3. Review</div>
+                    </div>
+
+                    <div class="p-8 md:p-12 relative z-50">
+                        
+                        <!-- Step 1: Templates -->
+                        <div id="planner-step-1" class="step-active">
+                            <h3 class="text-2xl font-bold text-slate-900 mb-6">Select a Project Template</h3>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div onclick="selectPlannerTemplate('Residential Home')" class="cursor-pointer border-2 border-slate-100 hover:border-blue-500 rounded-xl p-6 transition-all group">
+                                    <i class="fa-solid fa-house text-3xl text-slate-400 group-hover:text-blue-500 mb-4 block"></i>
+                                    <h4 class="font-bold text-lg text-slate-900 mb-1">Residential Home</h4>
+                                    <p class="text-sm text-slate-500">Mini lifts, space-saving designs, premium cabin finishes.</p>
+                                </div>
+                                <div onclick="selectPlannerTemplate('Commercial Complex')" class="cursor-pointer border-2 border-slate-100 hover:border-blue-500 rounded-xl p-6 transition-all group">
+                                    <i class="fa-solid fa-building text-3xl text-slate-400 group-hover:text-blue-500 mb-4 block"></i>
+                                    <h4 class="font-bold text-lg text-slate-900 mb-1">Commercial Complex</h4>
+                                    <p class="text-sm text-slate-500">High traffic passenger lifts, glass panoramas.</p>
+                                </div>
+                                <div onclick="selectPlannerTemplate('Hospital & Healthcare')" class="cursor-pointer border-2 border-slate-100 hover:border-blue-500 rounded-xl p-6 transition-all group">
+                                    <i class="fa-solid fa-truck-medical text-3xl text-slate-400 group-hover:text-blue-500 mb-4 block"></i>
+                                    <h4 class="font-bold text-lg text-slate-900 mb-1">Hospital & Healthcare</h4>
+                                    <p class="text-sm text-slate-500">Stretcher capacity, smooth operation, 15+ persons.</p>
+                                </div>
+                                <div onclick="selectPlannerTemplate('Industrial / Factory')" class="cursor-pointer border-2 border-slate-100 hover:border-blue-500 rounded-xl p-6 transition-all group">
+                                    <i class="fa-solid fa-industry text-3xl text-slate-400 group-hover:text-blue-500 mb-4 block"></i>
+                                    <h4 class="font-bold text-lg text-slate-900 mb-1">Industrial / Factory</h4>
+                                    <p class="text-sm text-slate-500">Heavy duty goods lifts, wide entry spans.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Specifications -->
+                        <div id="planner-step-2" class="step-hidden">
+                            <h3 class="text-2xl font-bold text-slate-900 mb-6" id="planner-type-title">Configure Details</h3>
+                            <div class="space-y-6">
+                                <div>
+                                    <label class="block text-sm font-semibold text-slate-700 mb-2">Number of Floors/Stops</label>
+                                    <select id="plan-floors" class="w-full px-4 py-3 rounded-lg border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500 relative z-50">
+                                        <option value="G+1 (2 Stops)">G+1 (2 Stops)</option>
+                                        <option value="G+2 (3 Stops)">G+2 (3 Stops)</option>
+                                        <option value="G+3 (4 Stops)">G+3 (4 Stops)</option>
+                                        <option value="G+4 (5 Stops)">G+4 (5 Stops)</option>
+                                        <option value="5+ Floors">More than 5 Floors</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-slate-700 mb-2">Required Capacity</label>
+                                    <select id="plan-capacity" class="w-full px-4 py-3 rounded-lg border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500 relative z-50">
+                                        <option value="Small (2-4 Persons)">Small (2-4 Persons)</option>
+                                        <option value="Medium (5-8 Persons)">Medium (5-8 Persons)</option>
+                                        <option value="Large (10-15 Persons)">Large (10-15 Persons)</option>
+                                        <option value="Heavy Goods (1-3 Tons)">Heavy Goods (1-3 Tons)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-slate-700 mb-2">Preferred Door Type</label>
+                                    <select id="plan-doors" class="w-full px-4 py-3 rounded-lg border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500 relative z-50">
+                                        <option value="Automatic Standard">Automatic Standard</option>
+                                        <option value="Glass / Panoramic">Glass / Panoramic</option>
+                                        <option value="Manual Collapsible">Manual Collapsible</option>
+                                        <option value="Stainless Steel">Stainless Steel</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="flex justify-between mt-8 relative z-50">
+                                    <button onclick="changePlannerStep(1)" class="px-6 py-3 border border-slate-300 text-slate-600 font-bold rounded-lg hover:bg-slate-50">Back</button>
+                                    <button onclick="changePlannerStep(3)" class="px-6 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700">Continue to Review</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Review & Send -->
+                        <div id="planner-step-3" class="step-hidden">
+                            <h3 class="text-2xl font-bold text-slate-900 mb-6">Review & Send</h3>
+                            
+                            <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 mb-6">
+                                <h4 class="font-bold text-slate-800 border-b border-slate-200 pb-2 mb-4">Project Blueprint Summary</h4>
+                                <ul class="space-y-3 text-slate-700">
+                                    <li><strong>Building Type:</strong> <span id="summary-type"></span></li>
+                                    <li><strong>Floors/Stops:</strong> <span id="summary-floors"></span></li>
+                                    <li><strong>Capacity:</strong> <span id="summary-capacity"></span></li>
+                                    <li><strong>Door Finish:</strong> <span id="summary-doors"></span></li>
+                                </ul>
+                            </div>
+
+                            <div class="space-y-4 mb-8">
+                                <div>
+                                    <label class="block text-sm font-semibold text-slate-700 mb-2">Your Name</label>
+                                    <input type="text" id="plan-name" placeholder="John Doe" class="w-full px-4 py-3 rounded-lg border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500 relative z-50">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-slate-700 mb-2">Any additional notes?</label>
+                                    <input type="text" id="plan-notes" placeholder="e.g. Existing shaft available, need installation next month" class="w-full px-4 py-3 rounded-lg border border-slate-200 outline-none focus:ring-2 focus:ring-blue-500 relative z-50">
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row justify-between gap-4 relative z-50">
+                                <button onclick="changePlannerStep(2)" class="px-6 py-3 border border-slate-300 text-slate-600 font-bold rounded-lg hover:bg-slate-50">Back</button>
+                                <button onclick="submitPlanner()" class="px-6 py-3 bg-green-600 text-white font-bold rounded-lg hover:bg-green-500 flex items-center justify-center">
+                                    <i class="fa-brands fa-whatsapp text-xl mr-2"></i> Send Plan to WhatsApp
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= CONTACT SECTION ================= -->
+        <section id="contact" class="page-section hidden fade-in py-16 bg-slate-50/90 backdrop-blur-sm min-h-screen relative z-10">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-16 relative z-20">
+                    <h1 class="text-4xl font-extrabold text-slate-900 mb-4 bg-white/50 inline-block p-2 rounded">Contact Us</h1>
+                    <p class="text-lg text-slate-600 max-w-2xl mx-auto bg-white/50 p-2 rounded">
+                        Get in touch with us for product inquiries, quotations, or service requirements. 
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-5 gap-12 bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100 relative z-20">
+                    
+                    <!-- Contact Info Sidebar -->
+                    <div class="md:col-span-2 bg-slate-900 text-white p-10 flex flex-col justify-between relative overflow-hidden">
+                        <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-blue-600/20 blur-3xl"></div>
+                        
+                        <div class="relative z-10">
+                            <h3 class="text-2xl font-bold mb-8">Reach Out to Us</h3>
+                            
+                            <div class="space-y-8">
+                                <div class="flex items-start">
+                                    <div class="bg-white/10 p-3 rounded-lg mr-4">
+                                        <i class="fa-solid fa-location-dot w-6 h-6 flex justify-center items-center text-blue-400"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-lg mb-2">Our Location</h4>
+                                        <p class="text-slate-300 leading-relaxed text-sm">
+                                            Lorven Homes Private Limited<br/>
+                                            Behind RRS ASMR Enclave, Sri Ram Nagar Colony, Near Malla Reddy Hospital, Hyderabad - 500037, Telangana, India
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start">
+                                    <div class="bg-white/10 p-3 rounded-lg mr-4">
+                                        <i class="fa-solid fa-phone w-6 h-6 flex justify-center items-center text-blue-400"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-lg mb-2">Call Us</h4>
+                                        <p class="text-slate-300 leading-relaxed text-sm">
+                                            08045476585<br/>
+                                            <span class="text-slate-400">Mr. Sandeep (Proprietor)</span>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start cursor-pointer hover:bg-white/5 p-2 -ml-2 rounded transition relative z-50" onclick="quickQuote('General Inquiry')">
+                                    <div class="bg-green-500/20 p-3 rounded-lg mr-4">
+                                        <i class="fa-brands fa-whatsapp w-6 h-6 flex justify-center items-center text-green-400 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-lg mb-2">WhatsApp Us</h4>
+                                        <p class="text-slate-300 leading-relaxed text-sm">
+                                            Click to chat instantly
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Area -->
+                    <div class="md:col-span-3 p-10 lg:p-14" id="form-wrapper">
+                        <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-6 fade-in relative z-50">
+                            <h3 class="text-2xl font-bold text-slate-900 mb-6">Tell us your requirement</h3>
+                            
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="space-y-2">
+                                    <label class="text-sm font-medium text-slate-700">Full Name</label>
+                                    <input id="cf-name" required type="text" placeholder="e.g. John Doe" class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all" />
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-sm font-medium text-slate-700">Mobile Number</label>
+                                    <input id="cf-phone" required type="tel" placeholder="Mobile No. is needed" class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all" />
+                                </div>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-slate-700">Email Address</label>
+                                <input id="cf-email" required type="email" placeholder="Your Email id" class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all" />
+                            </div>
+
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-slate-700">Additional Details / Product Name</label>
+                                <textarea id="cf-details" required rows="4" placeholder="E.g., I need a quotation for a 15 Persons Hospital Elevator..." class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all resize-none"></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-4 rounded-lg transition-colors flex justify-center items-center">
+                                <i class="fa-brands fa-whatsapp text-xl mr-2"></i> Submit via WhatsApp
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900/95 backdrop-blur-sm text-slate-300 py-12 mt-auto border-t border-slate-800 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-8 relative z-20">
+            <div>
+                <div class="flex items-center mb-6">
+                    <div class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center mr-3">
+                        <i class="fa-solid fa-circle-up text-white text-sm"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-white">Lorven Elevators</h2>
+                </div>
+                <p class="text-slate-400 mb-4 text-sm leading-relaxed">
+                    Quality Residential Mini Lift and Manual Outdoor Lift Manufacturer and Supplier from Hyderabad. Seamless blend of engineering precision and aesthetic appeal.
+                </p>
+                <p class="text-sm font-semibold text-white">GST : 36AAECL8552H1Z9</p>
+            </div>
+            
+            <div>
+                <h3 class="text-lg font-bold text-white mb-6">Quick Links</h3>
+                <ul class="space-y-3 text-sm">
+                    <li><button onclick="navigate('home')" class="hover:text-blue-400 transition-colors relative z-50">Home Page</button></li>
+                    <li><button onclick="navigate('about')" class="hover:text-blue-400 transition-colors relative z-50">Company Profile</button></li>
+                    <li><button onclick="navigate('products')" class="hover:text-blue-400 transition-colors relative z-50">Our Products</button></li>
+                    <li><button onclick="navigate('services')" class="hover:text-blue-400 transition-colors relative z-50">Services</button></li>
+                    <li><button onclick="navigate('planner')" class="hover:text-blue-400 transition-colors relative z-50">Project Planner</button></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="text-lg font-bold text-white mb-6">Contact Details</h3>
+                <ul class="space-y-4 text-sm">
+                    <li class="flex items-start">
+                        <i class="fa-solid fa-location-dot w-5 h-5 mr-3 text-blue-500 shrink-0 mt-1"></i>
+                        <span>Behind RRS ASMR Enclave, Sri Ram Nagar Colony, Near Malla Reddy Hospital, Hyderabad - 500037</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fa-solid fa-phone w-5 h-5 mr-3 text-blue-500 shrink-0"></i>
+                        <span>08045476585 <br/><span class="text-xs text-slate-400">Mr. Sandeep (Proprietor)</span></span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fa-solid fa-envelope w-5 h-5 mr-3 text-blue-500 shrink-0"></i>
+                        <span>sales@lorvenelevators.com</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 mt-12 pt-8 border-t border-slate-800 text-sm text-center text-slate-500 relative z-20" id="copyright-year">
+            <!-- Year set by JS -->
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // WhatsApp Configuration Number
+        const WA_NUMBER = "918045476585";
+
+        // Set dynamic copyright year
+        document.getElementById('copyright-year').innerHTML = `&copy; ${new Date().getFullYear()} Lorven Homes Private Limited. All Rights Reserved.`;
+
+        // Routing Logic
+        function navigate(tabId) {
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(sec => sec.classList.add('hidden'));
+
+            const targetSection = document.getElementById(tabId);
+            targetSection.classList.remove('hidden');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            const desktopNavBtns = document.querySelectorAll('.nav-btn');
+            desktopNavBtns.forEach(btn => {
+                btn.classList.remove('text-blue-600');
+                btn.classList.add('text-slate-600');
+            });
+            const activeDesktopBtns = document.querySelectorAll(`.nav-btn[data-target="${tabId}"]`);
+            activeDesktopBtns.forEach(btn => {
+                btn.classList.remove('text-slate-600');
+                btn.classList.add('text-blue-600');
+            });
+
+            const mobileNavBtns = document.querySelectorAll('.nav-btn-mobile');
+            mobileNavBtns.forEach(btn => {
+                btn.classList.remove('text-blue-600');
+                btn.classList.add('text-slate-600');
+            });
+            const activeMobileBtns = document.querySelectorAll(`.nav-btn-mobile[data-target="${tabId}"]`);
+            activeMobileBtns.forEach(btn => {
+                btn.classList.remove('text-slate-600');
+                btn.classList.add('text-blue-600');
+            });
+
+            document.getElementById('mobile-menu').classList.add('hidden');
+            
+            const tabNames = {
+                'home': 'Home', 'about': 'About Us', 'products': 'Our Products',
+                'services': 'Services', 'planner': 'Project Planner', 'contact': 'Contact Us'
+            };
+            document.title = `Lorven Elevators | ${tabNames[tabId]}`;
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('mobile-menu-icon');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                menu.classList.add('hidden');
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        }
+
+        // WhatsApp Utility functions
+        function sendToWhatsApp(message) {
+            const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        function quickQuote(productName) {
+            sendToWhatsApp(`Hello Lorven Elevators,\n\nI am interested in getting a quotation and more details about: *${productName}*.\n\nPlease assist me.`);
+        }
+
+        // Main Contact Form Submit
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('cf-name').value;
+            const phone = document.getElementById('cf-phone').value;
+            const email = document.getElementById('cf-email').value;
+            const details = document.getElementById('cf-details').value;
+
+            const msg = `*New Inquiry via Website*\n\n*Name:* ${name}\n*Phone:* ${phone}\n*Email:* ${email}\n\n*Requirements:*\n${details}`;
+            sendToWhatsApp(msg);
+            e.target.reset();
+        }
+
+        // --- IMAGE SLIDER LOGIC ---
+        function changeSlide(sliderId, direction) {
+            const container = document.getElementById(sliderId);
+            const slides = container.querySelectorAll('.slide');
+            let currentIndex = 0;
+            
+            // Find active
+            slides.forEach((slide, index) => {
+                if (slide.classList.contains('slide-active')) currentIndex = index;
+            });
+            
+            // Hide current
+            slides[currentIndex].classList.remove('slide-active');
+            slides[currentIndex].classList.add('slide-hidden');
+            
+            // Calculate next
+            let nextIndex = currentIndex + direction;
+            if (nextIndex >= slides.length) nextIndex = 0;
+            if (nextIndex < 0) nextIndex = slides.length - 1;
+            
+            // Show next
+            slides[nextIndex].classList.remove('slide-hidden');
+            slides[nextIndex].classList.add('slide-active');
+        }
+
+        function prevSlide(sliderId) { changeSlide(sliderId, -1); }
+        function nextSlide(sliderId) { changeSlide(sliderId, 1); }
+
+        // Auto play sliders
+        setInterval(() => {
+            if(document.getElementById('services').classList.contains('hidden') === false) {
+                nextSlide('slider-install');
+                nextSlide('slider-maint');
+                nextSlide('slider-mod');
+            }
+        }, 4000);
+
+        // --- PROJECT PLANNER LOGIC ---
+        let plannerData = { type: '' };
+
+        function selectPlannerTemplate(type) {
+            plannerData.type = type;
+            document.getElementById('planner-type-title').innerText = `Configure Details for: ${type}`;
+            
+            // Pre-fill smart defaults
+            if(type === 'Residential Home') {
+                document.getElementById('plan-floors').value = 'G+2 (3 Stops)';
+                document.getElementById('plan-capacity').value = 'Small (2-4 Persons)';
+                document.getElementById('plan-doors').value = 'Automatic Standard';
+            } else if (type === 'Hospital & Healthcare') {
+                document.getElementById('plan-floors').value = 'G+4 (5 Stops)';
+                document.getElementById('plan-capacity').value = 'Large (10-15 Persons)';
+                document.getElementById('plan-doors').value = 'Stainless Steel';
+            }
+            
+            changePlannerStep(2);
+        }
+
+        function changePlannerStep(step) {
+            // Populate Review data if going to step 3
+            if(step === 3) {
+                document.getElementById('summary-type').innerText = plannerData.type;
+                document.getElementById('summary-floors').innerText = document.getElementById('plan-floors').value;
+                document.getElementById('summary-capacity').innerText = document.getElementById('plan-capacity').value;
+                document.getElementById('summary-doors').innerText = document.getElementById('plan-doors').value;
+            }
+
+            // UI Changes
+            [1,2,3].forEach(s => {
+                document.getElementById(`planner-step-${s}`).classList.remove('step-active');
+                document.getElementById(`planner-step-${s}`).classList.add('step-hidden');
+                
+                let pBar = document.getElementById(`prog-${s}`);
+                if (s <= step) {
+                    pBar.style.color = '#2563eb';
+                    pBar.style.background = '#eff6ff';
+                } else {
+                    pBar.style.color = '#64748b';
+                    pBar.style.background = '#f1f5f9';
+                }
+            });
+            document.getElementById(`planner-step-${step}`).classList.remove('step-hidden');
+            document.getElementById(`planner-step-${step}`).classList.add('step-active');
+        }
+
+        function submitPlanner() {
+            const name = document.getElementById('plan-name').value || 'A Valued Client';
+            const notes = document.getElementById('plan-notes').value || 'No additional notes.';
+            
+            const floors = document.getElementById('plan-floors').value;
+            const capacity = document.getElementById('plan-capacity').value;
+            const doors = document.getElementById('plan-doors').value;
+
+            const msg = `*Project Planner Submission*\n\nHello Lorven Elevators, I have created a project plan using your website. Here are my details:\n\n*Name:* ${name}\n*Building Type:* ${plannerData.type}\n*Floors:* ${floors}\n*Capacity:* ${capacity}\n*Doors:* ${doors}\n\n*Additional Notes:* ${notes}\n\nPlease provide a consultation/quotation based on this blueprint.`;
+            
+            sendToWhatsApp(msg);
+        }
+    </script>
+</body>
+</html>
